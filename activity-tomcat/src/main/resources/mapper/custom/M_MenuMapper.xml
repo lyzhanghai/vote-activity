@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyl.outsourcing.activity.dao.mapper.MenuMapper">
+    <resultMap id="WithChildrenResultMap" type="com.lyl.outsourcing.activity.entity.Menu">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <collection property="children" select="selectByParentIdWithChildren" column="id" />
+    </resultMap>
+
+    <select id="selectByExampleWithChildren" parameterType="com.lyl.outsourcing.activity.entity.MenuExample" resultMap="WithChildrenResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from p_menu
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByParentIdWithChildren" parameterType="java.lang.Long" resultMap="WithChildrenResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from p_menu WHERE parent_id=#{parent_id}
+    </select>
+</mapper>

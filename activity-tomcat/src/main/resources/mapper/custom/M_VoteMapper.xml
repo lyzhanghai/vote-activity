@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyl.outsourcing.activity.dao.mapper.VoteMapper">
+    <resultMap id="listResultMap" type="com.lyl.outsourcing.activity.entity.Vote">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    </resultMap>
+    <resultMap id="voteRecordResultMap" type="com.lyl.outsourcing.activity.entity.VoteRecord">
+        <result column="open_id" jdbcType="VARCHAR" property="openId" />
+        <result column="vote_id" jdbcType="VARCHAR" property="voteId" />
+        <result column="vote_item_id" jdbcType="TIMESTAMP" property="voteItemId" />
+        <result column="vote_time" jdbcType="TIMESTAMP" property="voteTime" />
+    </resultMap>
+
+    <select id="list" resultMap="listResultMap">
+        select id, activity_id, name, start_time, end_time from act_vote
+        order by activity_id desc, id desc
+    </select>
+
+    <!-- 查询用户在指定活动中还没投票的投票项目 -->
+    <select id="selectUnfinishVote" resultType="com.lyl.outsourcing.activity.entity.Vote">
+        select v.id, v.name from act_vote v where v.activity_id=#{activityId}
+        and v.id not in (select r.vote_id from act_vote_record r where r.open_id=#{openId})
+    </select>
+    <select id="selectRecord" resultMap="voteRecordResultMap">
+        select open_id, vote_id, vote_item_id, vote_time from act_vote_record
+        where open_id=#{openId} and vote_id=#{voteId}
+    </select>
+</mapper>

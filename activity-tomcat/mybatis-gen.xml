@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+<!--
+# eclipse plugin 配置
+javaModelTargetProject=cmmcc-impl
+sqlMapTargetProject=cmmcc-impl/src/main/resources
+javaClientTargetProject=cmmcc-impl
+
+# 命令行执行配置
+javaModelTargetProject=src/main/java
+sqlMapTargetProject=src/main/resources
+javaClientTargetProject=src/main/java
+
+-->
+
+    <classPathEntry location="/Users/liyilin/Develop/maven/repository/mysql/mysql-connector-java/5.1.30/mysql-connector-java-5.1.30.jar"/>
+
+    <context id="test" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.108.6.235:3306/activity" userId="root"/>
+
+        <javaModelGenerator targetPackage="com.lyl.outsourcing.activity.entity" targetProject="src/main/java">
+            <!--<property name="trimStrings" value="true"/>-->
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lyl.outsourcing.activity.dao.mapper" targetProject="src/main/java"/>
+
+        <!-- 表定义 -->
+        <table tableName="p_menu" domainObjectName="Menu">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="p_user" domainObjectName="AdminUser">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="r_material" domainObjectName="Material"/>
+        <table tableName="act_activity" domainObjectName="Activity">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="act_vote" domainObjectName="Vote">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="act_vote_item" domainObjectName="VoteItem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="act_raffle" domainObjectName="Raffle">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="act_raffle_item" domainObjectName="RaffleItem">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="act_raffle_record" domainObjectName="RaffleRecord"/>
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyl.outsourcing.activity.dao.mapper.VoteItemMapper">
+    <resultMap id="listResultMap" type="com.lyl.outsourcing.activity.entity.VoteItem">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="vote_id" jdbcType="BIGINT" property="voteId" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="image_url" jdbcType="TIMESTAMP" property="imageUrl" />
+    </resultMap>
+    
+    <select id="selectPageByVoteId" resultMap="listResultMap" parameterType="java.lang.Long">
+        select id, vote_id, title, image_url from act_vote_item
+        where vote_id=#{voteId}
+    </select>
+
+    <!-- 投票操作 -->
+    <update id="updateVoteNumById">
+        update act_vote_statistics set vote_num=#{voteNum} where vote_item_id=#{id}
+    </update>
+    <select id="selectVoteNumById" resultType="java.lang.Long" parameterType="java.lang.Long">
+        select vote_num from act_vote_statistics where vote_item_id=#{id}
+    </select>
+    <insert id="insertVoteRecord">
+        insert into act_vote_record(open_id, vote_id, vote_item_id, vote_time)
+        value (#{openId}, ${voteId}, #{voteItemId}, #{voteTime})
+    </insert>
+</mapper>
