@@ -1,11 +1,13 @@
 package com.lyl.outsourcing.activity.dto.response
 
+import com.lyl.outsourcing.activity.entity.Activity
+
 /**
  * Created by liyilin on 2017/5/5.
  */
 class VoteResp implements Serializable {
     long id
-    long activityId
+    Activity activity
     String name
     String role
     String introduction

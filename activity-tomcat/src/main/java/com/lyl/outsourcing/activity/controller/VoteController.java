@@ -46,9 +46,10 @@ public class VoteController {
 
     @GetMapping
     public Object page(@OpenID String openId,
+                       Long activityId,
                        @RequestParam(defaultValue = "1") Integer pageIndex,
                        @RequestParam(defaultValue = "20")Integer pageSize) {
-        Result result = voteService.page(openId, pageIndex, pageSize);
+        Result result = voteService.page(openId, activityId, pageIndex, pageSize);
         return result;
     }
 

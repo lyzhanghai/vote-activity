@@ -44,7 +44,10 @@ public class MaterialController {
     }
 
     @GetMapping
-    public Object page(String type, Integer pageIndex, Integer pageSize) {
+    public Object page(
+            String type,
+            @RequestParam(defaultValue = "1") Integer pageIndex,
+            @RequestParam(defaultValue = "20") Integer pageSize) {
         Result result = materialService.page(type, pageIndex, pageSize);
         return result;
     }

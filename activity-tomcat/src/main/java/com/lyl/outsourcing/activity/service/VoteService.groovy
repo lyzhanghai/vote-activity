@@ -14,6 +14,7 @@ import com.lyl.outsourcing.activity.entity.Activity
 import com.lyl.outsourcing.activity.entity.Raffle
 import com.lyl.outsourcing.activity.entity.RaffleExample
 import com.lyl.outsourcing.activity.entity.Vote
+import com.lyl.outsourcing.activity.entity.VoteExample
 import com.lyl.outsourcing.activity.entity.VoteItemExample
 import com.lyl.outsourcing.activity.exception.FieldException
 import com.lyl.outsourcing.activity.exception.ObjectNotFoundException
@@ -57,7 +58,7 @@ class VoteService {
 
         voteDao.insert(vote)
 
-        new Result(0, null, vote)
+        new Result(0, null, parse(vote))
     }
 
     /**
@@ -81,7 +82,7 @@ class VoteService {
 
         voteDao.updateByPrimaryKey(vote)
 
-        new Result(0, null, vote)
+        new Result(0, null, parse(vote))
     }
 
     /**
@@ -124,9 +125,9 @@ class VoteService {
      * @param pageSize
      * @return
      */
-    Result page(String openId, int pageIndex, int pageSize) {
+    Result page(String openId, Long activityId, int pageIndex, int pageSize) {
         PageHelper.startPage(pageIndex, pageSize)
-        List<Vote> list = voteDao.list()
+        List<Vote> list = voteDao.list(activityId)
         PageInfo pageInfo = new PageInfo(list)
 
         List<VoteResp> voteRespList = new ArrayList<>(list.size())
@@ -146,7 +147,7 @@ class VoteService {
         Vote vote = voteDao.selectByPrimaryKey(id)
         if (vote == null)
             throw new ObjectNotFoundException(id, Vote.class)
-        new Result(0, null, vote)
+        new Result(0, null, parse(vote))
     }
 
     /**
@@ -171,8 +172,10 @@ class VoteService {
         if (vote.startTime.time >= vote.endTime.time)
             throw new FieldException("startTime", "开始时间必须早于结束时间")
 
-        if (vote.id != null) {
+        if (vote.activityId != null) {
             def activity = activityDao.selectByPrimaryKey(vote.activityId)
+            if (activity == null)
+                throw new ObjectNotFoundException(vote.activityId, Activity)
             if (vote.startTime.time < activity.startTime.time)
                 throw new FieldException("startTime", "投票主题开始时间必须等于或迟于活动开始时间")
             if (vote.endTime.time > activity.endTime.time)
@@ -180,10 +183,15 @@ class VoteService {
         }
     }
 
-    private VoteResp parse(Vote vote, String openId) {
+    private VoteResp parse(Vote vote, String openId=null) {
         Date now = new Date()
         VoteResp voteResp = new VoteResp()
         XUtil.copy(vote, voteResp)
+
+        if (vote.activityId != null) {
+            Activity activity = activityDao.selectByPrimaryKey(vote.activityId)
+            voteResp.activity = activity
+        }
 
         if (openId != null) {
             boolean voted = voteDao.isVoted(openId, vote.id)

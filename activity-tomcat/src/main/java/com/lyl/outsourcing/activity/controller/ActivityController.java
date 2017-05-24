@@ -51,7 +51,7 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}")
-    public Object getById(@RequestParam Long id) {
+    public Object getById(@PathVariable Long id) {
         Result result = activityService.getById(id);
         return result;
     }

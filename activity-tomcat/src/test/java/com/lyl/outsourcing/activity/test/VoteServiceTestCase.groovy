@@ -5,6 +5,7 @@ import com.lyl.outsourcing.activity.dao.VoteDao
 import com.lyl.outsourcing.activity.dto.Result
 import com.lyl.outsourcing.activity.dto.request.VoteForm
 import com.lyl.outsourcing.activity.dto.request.VoteItemSaveReq
+import com.lyl.outsourcing.activity.dto.response.VoteResp
 import com.lyl.outsourcing.activity.entity.Vote
 import com.lyl.outsourcing.activity.entity.VoteExample
 import com.lyl.outsourcing.activity.entity.VoteItem
@@ -50,7 +51,8 @@ class VoteServiceTestCase extends TestBase {
 
         Result result = voteService.save(saveReq)
         assert result.code == 0 : "${result.code}: ${result.msg}"
-        idSet << (result.data as Vote).id
+        println XUtil.toJson(result.data)
+        idSet << (result.data as VoteResp).id
     }
 
     @Test
@@ -74,7 +76,7 @@ class VoteServiceTestCase extends TestBase {
     @Test
     void test3_page() {
         5.times { test1_save() }
-        Result result = voteService.page(null, 1, 5)
+        Result result = voteService.page(null, null, 1, 5)
         assert result.code == 0 : "${result.code}: ${result.msg}"
         println XUtil.toJson(result)
         result.data.list.each {

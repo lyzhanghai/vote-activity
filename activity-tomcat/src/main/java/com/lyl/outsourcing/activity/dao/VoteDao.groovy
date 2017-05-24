@@ -37,8 +37,8 @@ class VoteDao extends BaseDao<Vote> implements VoteMapper {
             throw new ObjectNotFoundException(id, Vote.class)
     }
 
-    List<Vote> list() {
-        sqlSession.selectList("${NAMESPACE}.list")
+    List<Vote> list(Long activityId) {
+        sqlSession.selectList("${NAMESPACE}.list", [activityId: activityId])
     }
 
     Long countByActivityId(long activityId) {

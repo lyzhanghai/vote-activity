@@ -17,6 +17,11 @@
 
     <select id="list" resultMap="listResultMap">
         select id, activity_id, name, start_time, end_time from act_vote
+        <where>
+            <if test="activityId != null">
+                activity_id=#{activityId}
+            </if>
+        </where>
         order by activity_id desc, id desc
     </select>
 

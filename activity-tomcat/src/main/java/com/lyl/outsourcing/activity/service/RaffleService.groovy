@@ -108,6 +108,15 @@ class RaffleService {
     private void assertTimeLegal(Raffle raffle) {
         if (raffle.startTime.time >= raffle.endTime.time)
             throw new FieldException("startTime", "开始时间必须早于结束时间")
+        if (raffle.getActivityId() != null) {
+            Activity activity = activityDao.selectByPrimaryKey(raffle.activityId)
+            if (activity == null)
+                throw new ObjectNotFoundException(raffle.activityId, Activity)
+            if (raffle.startTime.time < activity.startTime.time)
+                throw new FieldException("startTime", "抽奖开始时间必须等于或迟于活动开始时间")
+            if (raffle.endTime.time > activity.endTime.time)
+                throw new FieldException("endTime", "抽奖结束时间必须等于或早于活动开始时间")
+        }
     }
 
     private Result deleteById(long id) {

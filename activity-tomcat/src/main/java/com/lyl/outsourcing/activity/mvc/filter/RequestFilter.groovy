@@ -32,8 +32,8 @@ class RequestFilter implements Filter {
         String remoteAddr = httpServletRequest.remoteAddr
         String params = XUtil.toJson( httpServletRequest.parameterMap )
         String cookies = XUtil.toJson( httpServletRequest.cookies )
-        String body = getBodyContent(httpServletRequest)
-        LOG.info( "访问记录：[remoteAddr:${remoteAddr}, URI:${url}, method:${method}, params:${params}, cookies:${cookies}, body:'${body}']" )
+//        String body = getBodyContent(httpServletRequest)
+        LOG.info( "访问记录：[remoteAddr:${remoteAddr}, URI:${url}, method:${method}, params:${params}, cookies:${cookies}']" )
 
         chain.doFilter(request, response)
     }
